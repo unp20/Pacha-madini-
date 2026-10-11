@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>Admin Panel | Pacha Madini</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --dark-green: #2F4F3E;
+    }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #F5F5F0; 
+      color: #0A0A0A;
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Anton', sans-serif; letter-spacing: -0.02em; }
+    
+    .gold { color: var(--gold); }
+    .bg-gold { background-color: var(--gold); }
+    .hover-gold:hover { color: var(--gold); }
+    
+    .ln-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .ln-btn {
+      background: #0A0A0A;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+    }
+    .ln-btn:hover { background: var(--gold); color: #0A0A0A; }
+    
+    .stat-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .stat-card:hover { border-color: var(--gold); }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .sidebar-link:hover { background: #F5F5F0; color: #0A0A0A; }
+    .sidebar-link.active { background: #0A0A0A; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full ln-card p-8">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 bg-gold rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl">🎤</div>
+        <h1 class="text-3xl font-bold mb-2">Admin Panel</h1>
+        <p class="text-gray-500 text-sm">Pacha Madini Dashboard</p>
+      </div>
+      
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Username</label>
+          <input type="text" id="admin-user" placeholder="admin" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-black transition text-sm" />
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Password</label>
+          <input type="password" id="admin-pass" placeholder="••••••••" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-black transition text-sm" />
+        </div>
+        <button type="submit" class="ln-btn w-full justify-center" style="padding: 14px;">Login to Dashboard</button>
+      </form>
+      
+      <p class="text-xs text-gray-400 text-center mt-4">
+        🔒 Demo: admin / pacha2026
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD (Hidden initially) ===== -->
+  <div id="dashboard" class="hidden min-h-screen">
+    
+    <!-- Top Bar -->
+    <div class="bg-black text-white px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold">PM</div>
+        <div>
+          <h1 class="font-bold">Pacha Madini</h1>
+          <p class="text-xs opacity-70">Admin Dashboard</p>
+        </div>
+      </div>
+      <button onclick="logout()" class="text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition">Logout</button>
+    </div>
+
+    <div class="flex">
+      
+      <!-- Sidebar -->
+      <aside class="w-64 bg-white border-r border-gray-200 min-h-screen p-4 hidden md:block">
+        <nav class="space-y-1">
+          <div class="sidebar-link active" onclick="showSection('overview')">
+            <span>📊</span> Overview
+          </div>
+          <div class="sidebar-link" onclick="showSection('chats')">
+            <span>💬</span> Chats
+          </div>
+          <div class="sidebar-link" onclick="showSection('orders')">
+            <span>📦</span> Orders
+          </div>
+          <div class="sidebar-link" onclick="showSection('music')">
+            <span>🎵</span> Music
+          </div>
+          <div class="sidebar-link" onclick="showSection('events')">
+            <span>📅</span> Events
+          </div>
+          <div class="sidebar-link" onclick="showSection('settings')">
+            <span>⚙️</span> Settings
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6">
+
+        <!-- ===== OVERVIEW ===== -->
+        <section id="section-overview">
+          <h2 class="text-3xl font-bold mb-6">Overview</h2>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card">
+              <p class="text-xs uppercase tracking-wider text-gray-500 mb-2">Total Chats</p>
+              <p class="text-3xl font-bold gold">24</p>
+              <p class="text-xs text-green-500 mt-1">↑ 12% this week</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs uppercase tracking-wider text-gray-500 mb-2">Orders</p>
+              <p class="text-3xl font-bold gold">18</p>
+              <p class="text-xs text-green-500 mt-1">↑ 8% this week</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs uppercase tracking-wider text-gray-500 mb-2">Revenue</p>
+              <p class="text-3xl font-bold gold">TZS 850K</p>
+              <p class="text-xs text-green-500 mt-1">↑ 15% this month</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs uppercase tracking-wider text-gray-500 mb-2">Bookings</p>
+              <p class="text-3xl font-bold gold">5</p>
+              <p class="text-xs text-yellow-500 mt-1">⏳ Pending</p>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="ln-card p-6">
+              <h3 class="font-bold mb-4">Recent Chats</h3>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                  <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold">JM</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Juma Mwakyusa</p>
+                    <p class="text-xs text-gray-500">Booking for event...</p>
+                  </div>
+                  <span class="text-xs text-gray-400">2m ago</span>
+                </div>
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                  <div class="w-10 h-10 bg-green-800 rounded-full flex items-center justify-center text-white font-bold">SA</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Sarah Ally</p>
+                    <p class="text-xs text-gray-500">Request collab...</p>
+                  </div>
+                  <span class="text-xs text-gray-400">15m ago</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-yellow-700 rounded-full flex items-center justify-center text-white font-bold">DK</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Dekko</p>
+                    <p class="text-xs text-gray-500">New track idea...</p>
+                  </div>
+                  <span class="text-xs text-gray-400">1h ago</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ln-card p-6">
+              <h3 class="font-bold mb-4">Recent Orders</h3>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                  <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">👕</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Pacha Tee White (M)</p>
+                    <p class="text-xs text-gray-500">Juma Mwakyusa</p>
+                  </div>
+                  <span class="text-xs font-bold gold">TZS 35K</span>
+                </div>
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                  <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">🧥</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Pacha Hoodie (L)</p>
+                    <p class="text-xs text-gray-500">Sarah Ally</p>
+                  </div>
+                  <span class="text-xs font-bold gold">TZS 65K</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">🧢</div>
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Pacha Cap Classic</p>
+                    <p class="text-xs text-gray-500">Dekko</p>
+                  </div>
+                  <span class="text-xs font-bold gold">TZS 25K</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== CHATS ===== -->
+        <section id="section-chats" class="hidden">
+          <h2 class="text-3xl font-bold mb-6">Chats</h2>
+          <div class="ln-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="text-left p-4 font-semibold">User</th>
+                  <th class="text-left p-4 font-semibold">Message</th>
+                  <th class="text-left p-4 font-semibold">Time</th>
+                  <th class="text-left p-4 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-semibold">Juma Mwakyusa</td>
+                  <td class="p-4 text-gray-600">Booking for event on Dec 25...</td>
+                  <td class="p-4 text-gray-400 text-xs">2m ago</td>
+                  <td class="p-4"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-semibold">Sarah Ally</td>
+                  <td class="p-4 text-gray-600">Request collab on new track...</td>
+                  <td class="p-4 text-gray-400 text-xs">15m ago</td>
+                  <td class="p-4"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-semibold">Dekko</td>
+                  <td class="p-4 text-gray-600">New track idea, let's talk...</td>
+                  <td class="p-4 text-gray-400 text-xs">1h ago</td>
+                  <td class="p-4"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Replied</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== ORDERS ===== -->
+        <section id="section-orders" class="hidden">
+          <h2 class="text-3xl font-bold mb-6">Orders</h2>
+          <div class="ln-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="text-left p-4 font-semibold">Order ID</th>
+                  <th class="text-left p-4 font-semibold">Customer</th>
+                  <th class="text-left p-4 font-semibold">Item</th>
+                  <th class="text-left p-4 font-semibold">Total</th>
+                  <th class="text-left p-4 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-mono text-xs">#ORD-001</td>
+                  <td class="p-4 font-semibold">Juma Mwakyusa</td>
+                  <td class="p-4 text-gray-600">Pacha Tee White (M)</td>
+                  <td class="p-4 font-bold gold">TZS 35K</td>
+                  <td class="p-4"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Shipped</span></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-mono text-xs">#ORD-002</td>
+                  <td class="p-4 font-semibold">Sarah Ally</td>
+                  <td class="p-4 text-gray-600">Pacha Hoodie (L)</td>
+                  <td class="p-4 font-bold gold">TZS 65K</td>
+                  <td class="p-4"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Processing</span></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-mono text-xs">#ORD-003</td>
+                  <td class="p-4 font-semibold">Dekko</td>
+                  <td class="p-4 text-gray-600">Pacha Cap Classic</td>
+                  <td class="p-4 font-bold gold">TZS 25K</td>
+                  <td class="p-4"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Delivered</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== MUSIC ===== -->
+        <section id="section-music" class="hidden">
+          <h2 class="text-3xl font-bold mb-6">Music Manager</h2>
+          <div class="ln-card p-6 mb-6">
+            <h3 class="font-bold mb-4">Add New Song</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <input type="text" placeholder="Song Title" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <input type="text" placeholder="Featuring (optional)" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <input type="file" accept="audio/*" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black md:col-span-2" />
+              <button class="ln-btn md:col-span-2 justify-center" style="padding: 12px;">Upload Song</button>
+            </div>
+          </div>
+          
+          <div class="ln-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="text-left p-4 font-semibold">#</th>
+                  <th class="text-left p-4 font-semibold">Title</th>
+                  <th class="text-left p-4 font-semibold">Year</th>
+                  <th class="text-left p-4 font-semibold">Plays</th>
+                  <th class="text-left p-4 font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4">1</td>
+                  <td class="p-4 font-semibold">On My Way</td>
+                  <td class="p-4 text-gray-600">2023</td>
+                  <td class="p-4">12,500</td>
+                  <td class="p-4"><button class="text-xs text-red-500">Delete</button></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4">2</td>
+                  <td class="p-4 font-semibold">Voice ya Pacha</td>
+                  <td class="p-4 text-gray-600">2023</td>
+                  <td class="p-4">8,300</td>
+                  <td class="p-4"><button class="text-xs text-red-500">Delete</button></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4">3</td>
+                  <td class="p-4 font-semibold">Umeniweza ft. Dekko</td>
+                  <td class="p-4 text-gray-600">2023</td>
+                  <td class="p-4">15,200</td>
+                  <td class="p-4"><button class="text-xs text-red-500">Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== EVENTS ===== -->
+        <section id="section-events" class="hidden">
+          <h2 class="text-3xl font-bold mb-6">Events & Bookings</h2>
+          <div class="ln-card p-6 mb-6">
+            <h3 class="font-bold mb-4">Add New Event</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <input type="text" placeholder="Event Name" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <input type="date" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <input type="text" placeholder="Location" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <input type="text" placeholder="Ticket Price" class="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-black" />
+              <button class="ln-btn md:col-span-2 justify-center" style="padding: 12px;">Add Event</button>
+            </div>
+          </div>
+          
+          <div class="ln-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="text-left p-4 font-semibold">Event</th>
+                  <th class="text-left p-4 font-semibold">Date</th>
+                  <th class="text-left p-4 font-semibold">Location</th>
+                  <th class="text-left p-4 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-semibold">Live Show — Dar</td>
+                  <td class="p-4 text-gray-600">Dec 25, 2026</td>
+                  <td class="p-4 text-gray-600">Dar es Salaam</td>
+                  <td class="p-4"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Confirmed</span></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="p-4 font-semibold">Hip-Hop Night — Mwanza</td>
+                  <td class="p-4 text-gray-600">Jan 15, 2027</td>
+                  <td class="p-4 text-gray-600">Mwanza</td>
+                  <td class="p-4"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== SETTINGS ===== -->
+        <section id="section-settings" class="hidden">
+          <h2 class="text-3xl font-bold mb-6">Settings</h2>
+          <div class="ln-card p-6 space-y-4">
+            <div>
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Site Title</label>
+              <input type="text" value="Pacha Madini | Official" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Tagline</label>
+              <input type="text" value=
