@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>Shop | Pacha Madini Official Merch</title>
+  <meta name="description" content="Shop official Pacha Madini merchandise - T-shirts, hoodies, caps. #Madini_is_in_a_building" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --dark-green: #2F4F3E;
+    }
+    
+    * { scroll-behavior: smooth; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #FFFFFF; 
+      color: #0A0A0A;
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Anton', sans-serif; letter-spacing: -0.02em; }
+    
+    .gold { color: var(--gold); }
+    .bg-gold { background-color: var(--gold); }
+    .bg-gray-light { background-color: #F5F5F0; }
+    .hover-gold:hover { color: var(--gold); }
+    
+    .ln-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .ln-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      transform: translateY(-4px);
+    }
+    
+    .ln-btn {
+      background: #0A0A0A;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .ln-btn:hover { background: var(--gold); color: #0A0A0A; }
+    
+    .ln-btn-outline {
+      background: transparent;
+      color: #0A0A0A;
+      border: 1.5px solid #0A0A0A;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .ln-btn-outline:hover { background: #0A0A0A; color: #fff; }
+    
+    /* Cart Sidebar */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+      z-index: 200;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 150;
+      display: none;
+    }
+    .cart-overlay.show { display: block; }
+    
+    .category-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #F5F5F0;
+      color: #666;
+    }
+    
+    .size-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #E5E5E5;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: #fff;
+    }
+    .size-btn:hover { border-color: var(--gold); }
+    .size-btn.active {
+      background: #0A0A0A;
+      color: #fff;
+      border-color: #0A0A0A;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 py-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg viewBox="0 0 400 450" class="w-9 h-9">
+          <circle cx="200" cy="180" r="140" fill="#2F4F3E" stroke="#1A1A1A" stroke-width="8"/>
+          <rect x="180" y="60" width="40" height="90" rx="20" fill="#D4AF37" stroke="#1A1A1A" stroke-width="4"/>
+          <rect x="195" y="150" width="10" height="30" fill="#D4AF37"/>
+          <rect x="185" y="180" width="30" height="15" rx="5" fill="#D4AF37" stroke="#1A1A1A" stroke-width="3"/>
+        </svg>
+        <span class="text-sm font-bold tracking-tight hidden md:block">PACHA MADINI</span>
+      </a>
+      
+      <ul class="hidden md:flex gap-8 text-sm font-medium">
+        <li><a href="index.html" class="hover-gold transition">Home</a></li>
+        <li><a href="index.html#music" class="hover-gold transition">Music</a></li>
+        <li><a href="shop.html" class="gold font-semibold">Shop</a></li>
+        <li><a href="index.html#about" class="hover-gold transition">About</a></li>
+        <li><a href="index.html#contact" class="hover-gold transition">Contact</a></li>
+      </ul>
+      
+      <div class="flex gap-2 items-center">
+        <button onclick="toggleCart()" class="relative bg-black text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-gold hover:text-black transition">
+          🛒 Cart
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HEADER ===== -->
+  <section class="pt-28 pb-12 px-4 md:px-6 bg-gray-light">
+    <div class="max-w-7xl mx-auto text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">Official Merch</p>
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">
+        Shop <span class="gold">Pacha Madini</span>
+      </h1>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Wear the movement. Official T-shirts, hoodies, and caps from Pacha Madini.
+        <br><span class="gold font-semibold">#Madini_is_in_a_building</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== FILTERS ===== -->
+  <section class="py-6 px-4 md:px-6 bg-white border-b border-gray-200 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-center gap-2">
+      <button onclick="filterProducts('all')" class="filter-btn active ln-btn text-xs" style="padding: 8px 16px;">All Products</button>
+      <button onclick="filterProducts('tshirt')" class="filter-btn ln-btn-outline text-xs" style="padding: 8px 16px;">T-Shirts</button>
+      <button onclick="filterProducts('hoodie')" class="filter-btn ln-btn-outline text-xs" style="padding: 8px 16px;">Hoodies</button>
+      <button onclick="filterProducts('cap')" class="filter-btn ln-btn-outline text-xs" style="padding: 8px 16px;">Caps</button>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCTS GRID ===== -->
+  <section class="py-12 px-4 md:px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+        <!-- Product 1: White Tee -->
+        <div class="ln-card product-card w-full" data-type="tshirt">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#F5F5F0"/>
+              <circle cx="200" cy="160" r="90" fill="#2F4F3E"/>
+              <rect x="185" y="80" width="30" height="65" rx="15" fill="#D4AF37" stroke="#1A1A1A" stroke-width="3"/>
+              <text x="200" y="290" font-family="Anton, sans-serif" font-size="42" fill="#D4AF37" text-anchor="middle">PACHA,</text>
+              <text x="200" y="340" font-family="Anton, sans-serif" font-size="52" fill="#D4AF37" text-anchor="middle">MADINI</text>
+              <text x="200" y="375" font-family="Inter, sans-serif" font-size="12" fill="#D4AF37" text-anchor="middle">Madini in the building</text>
+            </svg>
+            <span class="absolute top-3 left-3 category-pill bg-gold text-black">BEST SELLER</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Madini Tee — White</h3>
+            <p class="text-gray-500 text-xs mb-3">100% Cotton • Premium Quality</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 35,000</span>
+              <button onclick="addToCart('Pacha Tee White', 35000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2: Black Tee -->
+        <div class="ln-card product-card w-full" data-type="tshirt">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#1A1A1A"/>
+              <circle cx="200" cy="160" r="90" fill="#2F4F3E"/>
+              <rect x="185" y="80" width="30" height="65" rx="15" fill="#D4AF37"/>
+              <text x="200" y="290" font-family="Anton, sans-serif" font-size="42" fill="#D4AF37" text-anchor="middle">PACHA,</text>
+              <text x="200" y="340" font-family="Anton, sans-serif" font-size="52" fill="#D4AF37" text-anchor="middle">MADINI</text>
+            </svg>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Madini Tee — Black</h3>
+            <p class="text-gray-500 text-xs mb-3">100% Cotton • Premium Quality</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 35,000</span>
+              <button onclick="addToCart('Pacha Tee Black', 35000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3: Gold Hoodie -->
+        <div class="ln-card product-card w-full" data-type="hoodie">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#2F4F3E"/>
+              <text x="200" y="180" font-family="Anton, sans-serif" font-size="60" fill="#D4AF37" text-anchor="middle">HOODIE</text>
+              <text x="200" y="240" font-family="Anton, sans-serif" font-size="40" fill="#D4AF37" text-anchor="middle">GOLD</text>
+              <circle cx="200" cy="320" r="15" fill="#D4AF37"/>
+            </svg>
+            <span class="absolute top-3 left-3 category-pill bg-gold text-black">NEW</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Hoodie — Gold</h3>
+            <p class="text-gray-500 text-xs mb-3">Warm Fleece • Premium</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 65,000</span>
+              <button onclick="addToCart('Pacha Hoodie Gold', 65000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4: Cap -->
+        <div class="ln-card product-card w-full" data-type="cap">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#F5F5F0"/>
+              <ellipse cx="200" cy="200" rx="100" ry="80" fill="#1A1A1A"/>
+              <ellipse cx="200" cy="200" rx="80" ry="60" fill="#2F4F3E"/>
+              <text x="200" y="210" font-family="Anton, sans-serif" font-size="28" fill="#D4AF37" text-anchor="middle">PACHA</text>
+            </svg>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Cap — Classic</h3>
+            <p class="text-gray-500 text-xs mb-3">Adjustable • One Size</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">One</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 25,000</span>
+              <button onclick="addToCart('Pacha Cap Classic', 25000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5: Green Tee -->
+        <div class="ln-card product-card w-full" data-type="tshirt">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#2F4F3E"/>
+              <circle cx="200" cy="160" r="90" fill="#0A0A0A"/>
+              <text x="200" y="290" font-family="Anton, sans-serif" font-size="42" fill="#D4AF37" text-anchor="middle">MADINI</text>
+              <text x="200" y="340" font-family="Anton, sans-serif" font-size="42" fill="#D4AF37" text-anchor="middle">IN THE</text>
+              <text x="200" y="380" font-family="Anton, sans-serif" font-size="42" fill="#D4AF37" text-anchor="middle">BUILDING</text>
+            </svg>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Madini in the Building Tee</h3>
+            <p class="text-gray-500 text-xs mb-3">100% Cotton • Green</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 35,000</span>
+              <button onclick="addToCart('Madini Tee Green', 35000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6: Black Hoodie -->
+        <div class="ln-card product-card w-full" data-type="hoodie">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#0A0A0A"/>
+              <text x="200" y="180" font-family="Anton, sans-serif" font-size="60" fill="#D4AF37" text-anchor="middle">HOODIE</text>
+              <text x="200" y="240" font-family="Anton, sans-serif" font-size="40" fill="#D4AF37" text-anchor="middle">BLACK</text>
+            </svg>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Hoodie — Black</h3>
+            <p class="text-gray-500 text-xs mb-3">Warm Fleece • Premium</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 65,000</span>
+              <button onclick="addToCart('Pacha Hoodie Black', 65000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 7: Snapback -->
+        <div class="ln-card product-card w-full" data-type="cap">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#2F4F3E"/>
+              <ellipse cx="200" cy="200" rx="100" ry="80" fill="#D4AF37"/>
+              <ellipse cx="200" cy="200" rx="80" ry="60" fill="#0A0A0A"/>
+              <text x="200" y="210" font-family="Anton, sans-serif" font-size="28" fill="#D4AF37" text-anchor="middle">MADINI</text>
+            </svg>
+            <span class="absolute top-3 left-3 category-pill bg-gold text-black">HOT</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Snapback — Gold</h3>
+            <p class="text-gray-500 text-xs mb-3">Adjustable • Premium</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">One</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="gold font-bold text-lg">TZS 30,000</span>
+              <button onclick="addToCart('Pacha Snapback', 30000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 8: Bundle -->
+        <div class="ln-card product-card w-full" data-type="tshirt">
+          <div class="aspect-square bg-gray-light flex items-center justify-center relative overflow-hidden">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+              <rect width="400" height="400" fill="#F5F5F0"/>
+              <text x="200" y="150" font-family="Anton, sans-serif" font-size="50" fill="#2F4F3E" text-anchor="middle">BUNDLE</text>
+              <text x="200" y="210" font-family="Anton, sans-serif" font-size="60" fill="#D4AF37" text-anchor="middle">SAVE</text>
+              <text x="200" y="270" font-family="Anton, sans-serif" font-size="40" fill="#0A0A0A" text-anchor="middle">20%</text>
+            </svg>
+            <span class="absolute top-3 left-3 category-pill bg-red-500 text-white">DEAL</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-bold mb-1">Pacha Bundle — Tee + Cap</h3>
+            <p class="text-gray-500 text-xs mb-3">T-Shirt + Cap • Save 20%</p>
+            <div class="flex items-center gap-2 mb-3">
+              <button class="size-btn active" onclick="selectSize(this)">S</button>
+              <button class="size-btn" onclick="selectSize(this)">M</button>
+              <button class="size-btn" onclick="selectSize(this)">L</button>
+              <button class="size-btn" onclick="selectSize(this)">XL</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-gray-400 line-through text-xs">TZS 60,000</span>
+                <span class="gold font-bold text-lg ml-2">TZS 48,000</span>
+              </div>
+              <button onclick="addToCart('Pacha Bundle', 48000)" class="ln-btn text-xs" style="padding: 8px 16px;">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+      
