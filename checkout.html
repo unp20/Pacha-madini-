@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>Checkout | Pacha Madini Shop</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --dark-green: #2F4F3E;
+    }
+    
+    * { scroll-behavior: smooth; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #F5F5F0; 
+      color: #0A0A0A;
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Anton', sans-serif; letter-spacing: -0.02em; }
+    
+    .gold { color: var(--gold); }
+    .bg-gold { background-color: var(--gold); }
+    .bg-gray-light { background-color: #F5F5F0; }
+    .hover-gold:hover { color: var(--gold); }
+    
+    .ln-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .ln-btn {
+      background: #0A0A0A;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+    .ln-btn:hover { background: var(--gold); color: #0A0A0A; }
+    
+    .input-field {
+      width: 100%;
+      border: 1px solid #E5E5E5;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      transition: all 0.2s;
+      background: #fff;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #0A0A0A;
+    }
+    
+    /* Payment Method Cards */
+    .payment-method {
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .payment-method:hover { border-color: var(--gold); }
+    .payment-method.active {
+      border-color: var(--gold);
+      background: #FFFBF0;
+    }
+    
+    /* Progress Steps */
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #999;
+    }
+    .step.active { color: #0A0A0A; font-weight: 600; }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #E5E5E5;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .step.active .step-num { background: var(--gold); color: #0A0A0A; }
+    .step.done .step-num { background: #22c55e; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 py-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg viewBox="0 0 400 450" class="w-9 h-9">
+          <circle cx="200" cy="180" r="140" fill="#2F4F3E" stroke="#1A1A1A" stroke-width="8"/>
+          <rect x="180" y="60" width="40" height="90" rx="20" fill="#D4AF37" stroke="#1A1A1A" stroke-width="4"/>
+          <rect x="185" y="180" width="30" height="15" rx="5" fill="#D4AF37" stroke="#1A1A1A" stroke-width="3"/>
+        </svg>
+        <span class="text-sm font-bold tracking-tight hidden md:block">PACHA MADINI</span>
+      </a>
+      
+      <div class="flex items-center gap-4 text-xs">
+        <span class="text-gray-400">🔒 Secure Checkout</span>
+        <a href="shop.html" class="text-gray-600 hover-gold transition">← Back to Shop</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PROGRESS STEPS ===== -->
+  <div class="bg-white border-b border-gray-200 py-4 px-4">
+    <div class="max-w-3xl mx-auto flex justify-between items-center">
+      <div class="step done">
+        <div class="step-num">✓</div>
+        <span class="hidden md:inline">Cart</span>
+      </div>
+      <div class="flex-1 h-px bg-gray-200 mx-2"></div>
+      <div class="step active">
+        <div class="step-num">2</div>
+        <span class="hidden md:inline">Details</span>
+      </div>
+      <div class="flex-1 h-px bg-gray-200 mx-2"></div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <span class="hidden md:inline">Payment</span>
+      </div>
+      <div class="flex-1 h-px bg-gray-200 mx-2"></div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <span class="hidden md:inline">Done</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHECKOUT FORM ===== -->
+  <section class="py-10 px-4 md:px-6">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
+
+      <!-- LEFT: Form -->
+      <div class="md:col-span-2 space-y-6">
+
+        <!-- Contact Info -->
+        <div class="ln-card p-6">
+          <h2 class="text-xl font-bold mb-4">1. Contact Information</h2>
+          <div class="space-y-3">
+            <div class="grid md:grid-cols-2 gap-3">
+              <input type="text" id="first-name" placeholder="First Name" class="input-field" />
+              <input type="text" id="last-name" placeholder="Last Name" class="input-field" />
+            </div>
+            <input type="email" id="email" placeholder="Email Address" class="input-field" />
+            <input type="tel" id="phone" placeholder="Phone (e.g. 0712 345 678)" class="input-field" />
+          </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="ln-card p-6">
+          <h2 class="text-xl font-bold mb-4">2. Shipping Address</h2>
+          <div class="space-y-3">
+            <select id="region" class="input-field">
+              <option value="">-- Chagua Mkoa --</option>
+              <option value="dar">Dar es Salaam</option>
+              <option value="arusha">Arusha</option>
+              <option value="mwanza">Mwanza</option>
+              <option value="dodoma">Dodoma</option>
+              <option value="mbeya">Mbeya</option>
+              <option value="morogoro">Morogoro</option>
+              <option value="tanga">Tanga</option>
+              <option value="zanzibar">Zanzibar</option>
+              <option value="other">Mkoa Mwingine</option>
+            </select>
+            <input type="text" id="address" placeholder="Street / Village" class="input-field" />
+            <input type="text" id="ward" placeholder="Ward / Kijiji" class="input-field" />
+            <textarea id="notes" placeholder="Maelezo ya ziada (optional)" class="input-field" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="ln-card p-6">
+          <h2 class="text-xl font-bold mb-4">3. Payment Method</h2>
+          
+          <div class="space-y-3">
+            <div class="payment-method active" onclick="selectPayment('mpesa', this)">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
+              <div class="flex-1">
+                <p class="font-bold text-sm">M-Pesa (Vodacom)</p>
+                <p class="text-xs text-gray-500">Lipa kwa M-Pesa</p>
+              </div>
+            </div>
+
+            <div class="payment-method" onclick="selectPayment('tigopesa', this)">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
+              <div class="flex-1">
+                <p class="font-bold text-sm">Mixx by Yas (Tigo Pesa)</p>
+                <p class="text-xs text-gray-500">Lipa kwa Tigo Pesa</p>
+              </div>
+            </div>
+
+            <div class="payment-method" onclick="selectPayment('airtel', this)">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
+              <div class="flex-1">
+                <p class="font-bold text-sm">Airtel Money</p>
+                <p class="text-xs text-gray-500">Lipa kwa Airtel Money</p>
+              </div>
+            </div>
+
+            <div class="payment-method" onclick="selectPayment('halopesa', this)">
+              <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
+              <div class="flex-1">
+                <p class="font-bold text-sm">HaloPesa</p>
+                <p class="text-xs text-gray-500">Lipa kwa HaloPesa</p>
+              </div>
+            </div>
+
+            <div class="payment-method" onclick="selectPayment('bank', this)">
+              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">🏦</div>
+              <div class="flex-1">
+                <p class="font-bold text-sm">Bank Transfer</p>
+                <p class="text-xs text-gray-500">CRDB / NMB / NBC</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Details (dynamic) -->
+          <div id="payment-details" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm hidden">
+            <p id="payment-message" class="text-gray-600"></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Order Summary -->
+      <div class="md:col-span-1">
+        <div class="ln-card p-6 sticky top-6">
+          <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+          
+          <div id="order-items" class="space-y-3 mb-4 pb-4 border-b border-gray-200">
+            <!-- Items zitaingia hapa kwa JavaScript -->
+          </div>
+
+          <div class="space-y-2 text-sm mb-4">
+            <div class="flex justify-between">
+              <span class="text-gray-500">Subtotal</span>
+              <span id="subtotal" class="font-semibold">TZS 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Shipping</span>
+              <span id="shipping" class="font-semibold">TZS 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">VAT (0%)</span>
+              <span class="font-semibold">TZS 0</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between pt-4 border-t border-gray-200 mb-6">
+            <span class="font-bold">Total</span>
+            <span id="total" class="font-bold gold text-2xl">TZS 0</span>
+          </div>
+
+          <button onclick="placeOrder()" class="ln-btn">Complete Order →</button>
+
+          <div class="mt-4 text-xs text-gray-500 text-center">
+            🔒 Your information is safe and secure
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== SUCCESS MODAL ===== -->
+  <div id="success-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center">
+      <div class="w-20 h-20 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl">✓</div>
+      <h2 class="text-2xl font-bold mb-2">Order Placed!</h2>
+      <p class="text-gray-600 text-sm mb-4">Asante kwa kununua merch ya Pacha Madini!</p>
+      
+      <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+        <p class="text-xs text-gray-500 mb-1">Order ID:</p>
+        <p id="order-id" class="font-mono font-bold mb-3">#ORD-000</p>
+        
+        <p class="text-xs text-gray-500 mb-1">Jumla:</p>
+        <p id="success-total" class="font-bold gold mb-3">TZS 0</p>
+        
+        <p class="text-xs text-gray-500 mb-1">Malipo:</p>
+        <p id="success-payment" class="font-bold mb-3">M-Pesa</p>
+        
+        <p class="text-xs text-gray-500 mb-1">Maelekezo:</p>
+        <p id="success-instructions" class="text-sm text-gray-700">Utapokea SMS kwa maelezo ya malipo.</p>
+      </div>
+      
+      <div class="flex gap-3">
+        <a href="shop.html" class="ln-btn flex-1" style="background: #E5E5E5; color: #0A0A0A;">Shop More</a>
+        <a href="index.html" class="ln-btn flex-1">Go Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-black text-white pt-12 pb-6 px-4 md:px-6 mt-12">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-xl font-bold gold mb-2">PACHA MADINI</h2>
+      <p class="text-gray-400 text-xs mb-4">#Madini_is_in_a_building</p>
+      <p class="text-gray-500 text-xs">© 2026 Pacha Madini. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== LOAD CART =====
+    const cart = JSON.parse(localStorage.getItem('pacha-cart') || '[]');
+    let selectedPayment = 'mpesa';
+    let shippingCost = 0;
+
+    function renderOrder() {
+      const orderItems = document.getElementById('order-items');
+      
+      if (cart.length === 0) {
+        orderItems.innerHTML = '<p class="text-gray-400 text-center py-6 text-sm">Cart yako ni tupu</p>';
+        document.getElementById('subtotal').textContent = 'TZS 0';
+        document.getElementById('shipping').textContent = 'TZS 0';
+        document.getElementById('total').textContent = 'TZS 0';
+        return;
+      }
+      
+      let html = '';
+      let subtotal = 0;
+      
+      cart.forEach(item => {
+        const itemTotal = item.price * (item.qty || 1);
+        subtotal += itemTotal;
+        html += `
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">${item.name} × ${item.qty || 1}</span>
+            <span class="font-semibold">TZS ${itemTotal.toLocaleString()}</span>
+          </div>
+        `;
+      });
+      
+      orderItems.innerHTML = html;
+      document.getElementById('subtotal').textContent = 'TZS ' + subtotal.toLocaleString();
+      
+      // Shipping calculation
+      shippingCost = subtotal >= 100000 ? 0 : 5000;
+      if (subtotal === 0) shippingCost = 0;
+      
+      document.getElementById('shipping').textContent = shippingCost === 0 ? 'FREE' : 'TZS ' + shippingCost.toLocaleString();
+      document.getElementById('total').textContent = 'TZS ' + (subtotal + shippingCost).toLocaleString();
+    }
+
+    // ===== PAYMENT SELECTION =====
+    function selectPayment(method, element) {
+      selectedPayment = method;
+      
+      document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      
+      const details = document.getElementById('payment-details');
+      const message = document.getElementById('payment-message');
+      
+      const messages = {
+        'mpesa': '📱 Utapokea prompt kwenye simu yako ya Vodacom. Ingiza PIN yako ya M-Pesa kulipia.',
+        'tigopesa': '📱 Utapokea prompt kwenye simu yako ya Mixx by Yas. Ingiza PIN yako kulipia.',
+        'airtel': '📱 Utapokea prompt kwenye simu yako ya Airtel. Ingiza PIN yako kulipia.',
+        'halopesa': '📱 Utapokea prompt kwenye simu yako ya Halotel. Ingiza PIN yako kulipia.',
+        'bank': '🏦 Utapewa namba ya akaunti ya benki. Tuma malipo kisha utume risiti kwa WhatsApp.'
+      };
+      
+      message.textContent = messages[method];
+      details.classList.remove('hidden');
+    }
+
+    // ===== PLACE ORDER =====
+    function placeOrder() {
+      // Validate
+      const firstName = document.getElementById('first-name').value.trim();
+      const lastName = document.getElementById('last-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const region = document.getElementById('region').value;
+      const address = document.getElementById('address').value.trim();
+      
+      if (cart.length === 0) {
+        alert('❌ Cart yako ni tupu! Tafadhali ongeza bidhaa kwanza.');
+        return;
+      }
+      
+      if (!firstName || !lastName) {
+        alert('❌ Tafadhali jaza jina lako kamili.');
+        return;
+      }
+      
+      if (!email || !email.includes('@')) {
+        alert('❌ Tafadhali jaza email sahihi.');
+        return;
+      }
+      
+      if (!phone || phone.length < 9) {
+        alert('❌ Tafadhali jaza namba ya simu sahihi.');
+        return;
+      }
+      
+      if (!region) {
+        alert('❌ Tafadhali chagua mkoa wako.');
+        return;
+      }
+      
+      if (!address) {
+        alert('❌ Tafadhali jaza anwani yako.');
+        return;
+      }
+      
+      // Generate Order ID
+      const orderId = '#ORD-' + String(Math.floor(Math.random() * 9999)).padStart(4, '0');
+      const total = document.getElementById('total').textContent;
+      
+      // Payment instructions
+      const paymentNames = {
+        'mpesa': 'M-Pesa (Vodacom)',
+        'tigopesa': 'Mixx by Yas (Tigo Pesa)',
+        'airtel': 'Airtel Money',
+        'halopesa': 'HaloPesa',
+        'bank': 'Bank Transfer'
+      };
+      
+      const instructions = {
+        'mpesa': 'Utapokea prompt kwenye simu yako. Ingiza PIN yako ya M-Pesa kulipia. Kama hukupokea, piga *150*00#.',
+        'tigopesa': 'Utapokea prompt kwenye simu yako. Ingiza PIN yako ya Mixx by Yas kulipia. Kama hukupokea, piga *150*01#.',
+        'airtel': 'Utapokea prompt kwenye simu yako. Ingiza PIN yako ya Airtel Money kulipia. Kama hukupokea, piga *150*60#.',
+        'halopesa': 'Utapokea prompt kwenye simu yako. Ingiza PIN yako ya HaloPesa kulipia. Kama hukupokea, piga *150*88#.',
+        'bank': 'Tuma malipo kwa:\n\nCRDB Bank\nA/C: 0150XXXXXXX\nJina: Pacha Madini\n\nKisha tuma risiti kwa WhatsApp: +255 XXX XXX XXX'
+      };
+      
+      // Show success modal
+      document.getElementById('order-id').textContent = orderId;
+      document.getElementById('success-total').textContent = total;
+      document.getElementById('success-payment').textContent = paymentNames[selectedPayment];
+      document.getElementById('success-instructions').textContent = instructions[selectedPayment];
+      document.getElementById('success-modal').classList.remove('hidden');
+      
+      // Clear cart
+      localStorage.removeItem('pacha-cart');
+      
+      // Log order (in real app, send to backend)
+      console.log('Order placed:', {
+        orderId,
+        customer: { firstName, lastName, email, phone, region, address },
+        items: cart,
+        total,
+        payment: selectedPayment
+      });
+    }
+
+    // ===== SHIPPING (update on region change) =====
+    document.getElementById('region').addEventListener('change', function() {
+      // Zanzibar has additional shipping
+      if (this.value === 'zanzibar') {
+        shippingCost = 8000;
+      } else if (this.value === 'dar') {
+        shippingCost = 3000;
+      } else if (this.value) {
+        shippingCost = 5000;
+      } else {
+        shippingCost = 0;
+      }
+      
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.qty || 1)), 0);
+      
+      // Free shipping for orders above 100K
+      if (subtotal >= 100000) shippingCost = 0;
+      if (subtotal === 0) shippingCost = 0;
+      
+      document.getElementById('shipping').textContent = shippingCost === 0 ? 'FREE' : 'TZS ' + shippingCost.toLocaleString();
+      document.getElementById('total').textContent = 'TZS ' + (subtotal + shippingCost).toLocaleString();
+    });
+
+    // Initialize
+    renderOrder();
+    selectPayment('mpesa', document.querySelector('.payment-method'));
+  </script>
+
+</body>
+          </html>
