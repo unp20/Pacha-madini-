@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>Chat with Pacha Madini | Official</title>
+  <meta name="description" content="Chat directly with Pacha Madini. Ask questions, request collabs, or just say hi!" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --dark-green: #2F4F3E;
+    }
+    
+    * { scroll-behavior: smooth; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #FFFFFF; 
+      color: #0A0A0A;
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Anton', sans-serif; letter-spacing: -0.02em; }
+    
+    .gold { color: var(--gold); }
+    .bg-gold { background-color: var(--gold); }
+    .bg-gray-light { background-color: #F5F5F0; }
+    .hover-gold:hover { color: var(--gold); }
+    
+    .ln-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .ln-btn {
+      background: #0A0A0A;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .ln-btn:hover { background: var(--gold); color: #0A0A0A; }
+    
+    /* Chat */
+    .chat-container {
+      height: calc(100vh - 200px);
+      min-height: 500px;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      background: #F5F5F0;
+    }
+    
+    .message {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message.me {
+      flex-direction: row-reverse;
+    }
+    
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    
+    .avatar.pacha {
+      background: var(--gold);
+      color: #0A0A0A;
+    }
+    
+    .avatar.user {
+      background: #2F4F3E;
+      color: #fff;
+    }
+    
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 75%;
+      font-size: 14px;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+    
+    .bubble.pacha {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+    }
+    
+    .bubble.me {
+      background: var(--gold);
+      color: #0A0A0A;
+    }
+    
+    .time {
+      font-size: 10px;
+      opacity: 0.5;
+      margin-top: 4px;
+      display: block;
+    }
+    
+    /* Online indicator */
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Typing indicator */
+    .typing span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #999;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typing 1.4s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 py-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <svg viewBox="0 0 400 450" class="w-9 h-9">
+          <circle cx="200" cy="180" r="140" fill="#2F4F3E" stroke="#1A1A1A" stroke-width="8"/>
+          <rect x="180" y="60" width="40" height="90" rx="20" fill="#D4AF37" stroke="#1A1A1A" stroke-width="4"/>
+          <rect x="195" y="150" width="10" height="30" fill="#D4AF37"/>
+          <rect x="185" y="180" width="30" height="15" rx="5" fill="#D4AF37" stroke="#1A1A1A" stroke-width="3"/>
+        </svg>
+        <span class="text-sm font-bold tracking-tight hidden md:block">PACHA MADINI</span>
+      </a>
+      
+      <ul class="hidden md:flex gap-8 text-sm font-medium">
+        <li><a href="index.html" class="hover-gold transition">Home</a></li>
+        <li><a href="shop.html" class="hover-gold transition">Shop</a></li>
+        <li><a href="chat.html" class="gold font-semibold">Chat</a></li>
+      </ul>
+      
+      <a href="index.html" class="ln-btn text-xs">← Back Home</a>
+    </div>
+  </nav>
+
+  <!-- ===== CHAT HEADER ===== -->
+  <section class="pt-24 pb-8 px-4 md:px-6 bg-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">Direct Message</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-3">
+        Chat with <span class="gold">Pacha Madini</span>
+      </h1>
+      <p class="text-gray-600">Ask questions, request collabs, or just say hi!</p>
+    </div>
+  </section>
+
+  <!-- ===== JOIN FORM ===== -->
+  <section id="join-section" class="pb-16 px-4 md:px-6">
+    <div class="max-w-md mx-auto ln-card p-8">
+      <h2 class="text-2xl font-bold mb-2 text-center">Join the Chat</h2>
+      <p class="text-gray-500 text-sm text-center mb-6">Enter your details to start chatting</p>
+      
+      <form id="join-form" class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Your Name</label>
+          <input type="text" id="username" placeholder="e.g. Juma Mwakyusa" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-black transition text-sm" />
+        </div>
+        
+        <div>
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-black transition text-sm" />
+        </div>
+        
+        <div>
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">I am a...</label>
+          <select id="role" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-black transition text-sm">
+            <option value="fan">Fan / Shabiki</option>
+            <option value="artist">Artist / Msanii</option>
+            <option value="producer">Producer</option>
+            <option value="sponsor">Sponsor / Booking</option>
+            <option value="media">Media / Journalist</option>
+          </select>
+        </div>
+        
+        <button type="submit" class="ln-btn w-full justify-center" style="padding: 14px;">Start Chatting →</button>
+      </form>
+      
+      <p class="text-xs text-gray-400 text-center mt-4">
+        🔒 Your information is safe. We never share your data.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== CHAT INTERFACE (Hidden initially) ===== -->
+  <section id="chat-section" class="hidden pb-16 px-4 md:px-6">
+    <div class="max-w-4xl mx-auto ln-card overflow-hidden" style="height: calc(100vh - 180px); min-height: 600px; display: flex; flex-direction: column;">
+      
+      <!-- Chat Header -->
+      <div class="bg-black text-white px-6 py-4 flex items-center gap-3 flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
+          PM
+        </div>
+        <div class="flex-1">
+          <h3 class="font-bold">Pacha Madini</h3>
+          <div class="flex items-center gap-2 text-xs opacity-80">
+            <span class="online-dot"></span>
+            <span>Online • Typically replies in minutes</span>
+          </div>
+        </div>
+        <button onclick="endChat()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-2 rounded-full transition">
+          End Chat
+        </button>
+      </div>
+
+      <!-- Messages -->
+      <div id="messages" class="chat-messages"></div>
+
+      <!-- Quick Replies -->
+      <div class="px-4 py-3 bg-white border-t border-gray-100 flex gap-2 overflow-x-auto flex-shrink-0">
+        <button onclick="sendQuickReply('Booking for an event')" class="text-xs border border-gray-300 rounded-full px-3 py-2 whitespace-nowrap hover:border-gold hover:text-gold transition">Booking event</button>
+        <button onclick="sendQuickReply('Request collab')" class="text-xs border border-gray-300 rounded-full px-3 py-2 whitespace-nowrap hover:border-gold hover:text-gold transition">Collab</button>
+        <button onclick="sendQuickReply('Buy merch')" class="text-xs border border-gray-300 rounded-full px-3 py-2 whitespace-nowrap hover:border-gold hover:text-gold transition">Buy merch</button>
+        <button onclick="sendQuickReply('Just saying hi!')" class="text-xs border border-gray-300 rounded-full px-3 py-2 whitespace-nowrap hover:border-gold hover:text-gold transition">Say hi</button>
+      </div>
+
+      <!-- Input -->
+      <div class="px-4 py-4 bg-white border-t border-gray-100 flex gap-3 flex-shrink-0">
+        <input type="text" id="message-input" placeholder="Andika ujumbe wako..."
+          class="flex-1 border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:border-black transition text-sm" />
+        <button onclick="sendMessage()" class="bg-gold text-black w-12 h-12 rounded-full font-bold hover:bg-yellow-500 transition flex items-center justify-center flex-shrink-0">
+          ➤
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="pb-16 px-4 md:px-6 bg-gray-light py-16">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        <details class="ln-card p-5 cursor-pointer">
+          <summary class="font-bold">How do I book Pacha Madini for an event?</summary>
+          <p class="text-sm text-gray-600 mt-3">Send a message via chat with your event details (date, location, budget). Pacha's team will respond within 24 hours.</p>
+        </details>
+        <details class="ln-card p-5 cursor-pointer">
+          <summary class="font-bold">Can I collab with Pacha Madini?</summary>
+          <p class="text-sm text-gray-600 mt-3">Yes! Send your music and details via chat. He reviews all collab requests personally.</p>
+        </details>
+        <details class="ln-card p-5 cursor-pointer">
+          <summary class="font-bold">Where can I buy official merch?</summary>
+          <p class="text-sm text-gray-600 mt-3">Visit our <a href="shop.html" class="gold underline">Shop page</a> for official T-shirts, hoodies, and caps.</p>
+        </details>
+        <details class="ln-card p-5 cursor-pointer">
+          <summary class="font-bold">How long does shipping take?</summary>
+          <p class="text-sm text-gray-600 mt-3">Dar es Salaam: 1 day. Other regions: 3-5 days. International: 7-14 days.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-black text-white pt-16 pb-8 px-4 md:px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+        <div class="md:col-span-2">
+          <h2 class="text-2xl font-bold gold mb-4">PACHA MADINI</h2>
+          <p class="text-gray-400 text-sm max-w-md mb-6">Rapper, Songwriter & Hip-Hop Artist from Tanzania.</p>
+          <div class="flex gap-3 flex-wrap">
+            <a href="https://www.tiktok.com/@pacha_madini" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-black transition">🎵</a>
+            <a href="https://www.instagram.com/pacha_madini" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-black transition">📷</a>
+            <a href="https://www.facebook.com/profile.php?id=61592748543412" target="_blank" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-black transition">📘</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="gold font-bold mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+            <li><a href="shop.html" class="hover:text-white transition">Shop</a></li>
+            <li><a href="chat.html" class="hover:text-white transition">Chat</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="gold font-bold mb-4 text-sm uppercase tracking-wider">Streaming</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="https://www.boomplay.com/share/artist/EQKya9fagXUiUTSIi3aMYEsb" target="_blank" class="hover:text-white transition">Boomplay</a></li>
+            <li><a href="#" class="hover:text-white transition">Audiomack</a></li>
+            <li><a href="#" class="hover:text-white transition">Mdundo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-6 text-center text-xs text-gray-500">
+        <p>© 2026 Pacha Madini. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let currentUser = '';
+    let currentRole = '';
+    
+    // ===== JOIN CHAT =====
+    document.getElementById('join-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      currentUser = document.getElementById('username').value;
+      currentRole = document.getElementById('role').value;
+      
+      document.getElementById('join-section').classList.add('hidden');
+      document.getElementById('chat-section').classList.remove('hidden');
+      document.getElementById('chat-section').scrollIntoView({ behavior: 'smooth' });
+      
+      // Welcome message
+      addMessage('pacha', `Karibu ${currentUser}! 🎤\n\nNimefurahi kukuona hapa. Unaweza kuniuliza kuhusu:\n• Booking\n• Collab\n• Merch\n• Muziki wangu\n\nNiambie unahitaji nini?`, 'pacha');
+    });
+    
+    // ===== SEND MESSAGE =====
+    function sendMessage() {
+      const input = document.getElementById('message-input');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      addMessage(currentUser, text, 'me');
+      input.value = '';
+      
+      // Typing indicator
+      showTyping();
+      
+      // Auto-reply
+      setTimeout(() => {
+        hideTyping();
+        const reply = getAutoReply(text);
+        addMessage('pacha', reply, 'pacha');
+      }, 1500);
+    }
+    
+    function sendQuickReply(text) {
+      document.getElementById('message-input').value = text;
+      sendMessage();
+    }
+    
+    function addMessage(sender, text, type) {
+      const messages = document.getElementById('messages');
+      const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      
+      const div = document.createElement('div');
+      div.className = 'message ' + (type === 'me' ? 'me' : '');
+      
+      if (type === 'me') {
+        div.innerHTML = `
+          <div class="avatar user">${sender.charAt(0).toUpperCase()}</div>
+          <div>
+            <div class="bubble me">${text.replace(/\n/g, '<br>')}</div>
+            <span class="time" style="text-align: right;">${time}</span>
+          </div>
+        `;
+      } else {
+        div.innerHTML = `
+          <div class="avatar pacha">PM</div>
+          <div>
+            <div class="bubble pacha">${text.replace(/\n/g, '<br>')}</div>
+            <span class="time">${time}</span>
+          </div>
+        `;
+      }
+      
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+    
+    function showTyping() {
+      const messages = document.getElementById('messages');
+      const div = document.createElement('div');
+      div.className = 'message';
+      div.id = 'typing-indicator';
+      div.innerHTML = `
+        <div class="avatar pacha">PM</div>
+        <div class="bubble pacha">
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      `;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+    
+    function hideTyping() {
+      const typing = document.getElementById('typing-indicator');
+      if (typing) typing.remove();
+    }
+    
+    function getAutoReply(text) {
+      const lower = text.toLowerCase();
+      
+      if (lower.includes('booking') || lower.includes('event') || lower.includes('show')) {
+        return "Kwa booking, tafadhali nipe:\n\n📅 Tarehe\n📍 Mahali\n💰 Budget\n🎤 Aina ya event\n\nNitarudi kwako haraka! 🎵";
+      }
+      
+      if (lower.includes('collab') || lower.includes('feature')) {
+        return "Nafurahia collab! 🎶\n\nTafadhali tuma:\n• Jina lako\n• Link ya muziki wako\n• Aina ya collab unayotaka\n\nNitaisikiliza na nitakujibu. 🔥";
+      }
+      
+      if (lower.includes('merch') || lower.includes('shirt') || lower.includes('hoodie') || lower.includes('cap')) {
+        return "Asante kwa interest! 🛒\n\nTembelea shop yetu:\n👉 shop.html\n\nTuna:\n• T-shirts — TZS 35,000\n• Hoodies — TZS 65,000\n• Caps — TZS 25,000\n\nDelivery Dar: 1 day 📦";
+      }
+      
+      if (lower.includes('hi') || lower.includes('hello') || lower.includes('habari') || lower.includes('mambo')) {
+        return "Mambo vipi! 🔥\n\nNipo hapa kukusaidia. Unaweza kuniuliza kuhusu:\n\n🎵 Muziki\n🎤 Booking\n🤝 Collab\n👕 Merch\n\nNiambie!";
+      }
+      
+      if (lower.includes('music') || lower.includes('song') || lower.includes('nyimbo')) {
+        return "Muziki wangu unapatikana kwenye:\n\n📻 Boomplay\n🎵 Audiomack\n🎧 Mdundo\n\nNyimbo zangu:\n• On My Way\n• Voice ya Pacha\n• Umeniweza ft. Dekko\n• Shabiki ft. Mey Tone\n• MWAKE ft. Foby\n• BINGWA ft. Abby Gold\n\nSikiliza kwenye index.html#player 🎶";
+      }
+      
+      if (lower.includes('thank') || lower.includes('asante')) {
+        return "Karibu sana! 🙏\n\nKama una maswali mengine, nipo hapa. #Madini_is_in_a_building 🔥";
+      }
+      
+      // Default reply
+      return "Asante kwa ujumbe wako! 🙏\n\nNitakujibu hivi punde. Kwa haraka, unaweza:\n\n📧 Email: booking@pachamadini.com\n📱 WhatsApp: +255 XXX XXX XXX\n\nAu endelea kuchat nami hapa! 🎤";
+    }
+    
+    function endChat() {
+      if (confirm('Una uhakika unataka kumaliza chat?')) {
+        document.getElementById('chat-section').classList.add('hidden');
+        document.getElementById('join-section').classList.remove('hidden');
+        document.getElementById('messages').innerHTML = '';
+        document.getElementById('join-form').reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    // Enter key
+    document.getElementById('message-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+
+</body>
+    </html>
