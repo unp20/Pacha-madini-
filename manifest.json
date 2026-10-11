@@ -1,0 +1,50 @@
+{
+  "name": "Pacha Madini - Official Website",
+  "short_name": "Pacha Madini",
+  "description": "Rapper, Songwriter & Hip-Hop Artist from Tanzania. #Madini_is_in_a_building",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["music", "entertainment"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Listen to Music",
+      "short_name": "Music",
+      "description": "Play Pacha Madini songs",
+      "url": "/#player",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Shop Merch",
+      "short_name": "Shop",
+      "description": "Buy official Pacha Madini merch",
+      "url": "/#shop",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Book Pacha Madini",
+      "short_name": "Book",
+      "description": "Book for events",
+      "url": "/#contact",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
